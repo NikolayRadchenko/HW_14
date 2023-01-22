@@ -45,4 +45,5 @@ def load_movies_page_by_genre(genre):
     return result
 
 
-app.run()
+if __name__ == "__main__":
+    app.run()
