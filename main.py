@@ -2,9 +2,9 @@ from flask import Flask, request, render_template
 from utils import searches_by_word, searches_by_year, \
     searches_by_rating, searches_by_genre
 
-RATING_CHILDREN = ('G')
-RATING_FAMILY = ('G', 'PG', 'PG-13')
-RATING_ADULT = ('R', 'NC-17')
+RATING_CHILDREN = 'G'
+RATING_FAMILY = 'G', 'PG', 'PG-13'
+RATING_ADULT = 'R', 'NC-17'
 
 app = Flask(__name__)
 

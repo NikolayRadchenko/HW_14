@@ -1,8 +1,11 @@
 import sqlite3
 
+DATABASE = "data/netflix.db"
+
 
 def load_database():
-    with sqlite3.connect("data/netflix.db") as connection:
+    with sqlite3.connect(DATABASE) as connection:
+        connection.row_factory = sqlite3.Row
         return connection
 
 
@@ -19,12 +22,13 @@ def searches_by_word(word):
     for row in cursor.fetchall():
         if word in row:
             movie_data_json = {
-                    "title": row[0],
-                    "country": row[1],
-                    "release_year": row[2],
-                    "genre": row[3],
-                    "description": row[4]
-                }
+                "title": row[0],
+                "country": row[1],
+                "release_year": row[2],
+                "genre": row[3],
+                "description": row[4]
+            }
+            cursor.close()
             return movie_data_json
 
 
@@ -46,6 +50,7 @@ def searches_by_year(year1, year2):
             "release_year": row[1]
         }
         movie_data_list.append(movie_data_json)
+    cursor.close()
     return movie_data_list
 
 
@@ -55,7 +60,7 @@ def searches_by_rating(rating):
     query = f"""
             SELECT title, rating, description
             FROM netflix
-            WHERE rating LIKE '%{rating[0]}%'
+            WHERE rating IN ('{rating}')
             """
     cursor.execute(query)
     movie_data_list = []
@@ -66,6 +71,7 @@ def searches_by_rating(rating):
             "description": row[2]
         }
         movie_data_list.append(movie_data_json)
+    cursor.close()
     return movie_data_list
 
 
@@ -87,6 +93,7 @@ def searches_by_genre(genre):
             "description": row[1]
         }
         movie_data_list.append(movie_data_json)
+    cursor.close()
     return movie_data_list
 
 
@@ -108,4 +115,5 @@ def searches_by_type(type, year, genre):
             "description": row[1]
         }
         movie_data_list.append(movie_data_json)
+    cursor.close()
     return movie_data_list
