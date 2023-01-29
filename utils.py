@@ -57,23 +57,26 @@ def searches_by_year(year1, year2):
 def searches_by_rating(rating):
     connection = load_database()
     movie_data_list = []
-    for rat in rating:
-        cursor = connection.cursor()
-        query = f"""
+    cursor = connection.cursor()
+    if len(rating) == 1:
+        where_clause = f'rating = {rating}'
+    elif len(rating) > 1:
+        where_clause = f'rating IN ({rating})'
+    query = f"""
             SELECT title, rating, description
             FROM netflix
-            WHERE rating IN ('{rat}')
+            WHERE {where_clause}
             """
-        cursor.execute(query)
+    cursor.execute(query)
 
-        for row in cursor.fetchall():
-            movie_data_json = {
-                "title": row[0],
-                "rating": row[1],
-                "description": row[2]
-            }
-            movie_data_list.append(movie_data_json)
-        cursor.close()
+    for row in cursor.fetchall():
+        movie_data_json = {
+            "title": row[0],
+            "rating": row[1],
+            "description": row[2]
+        }
+        movie_data_list.append(movie_data_json)
+    cursor.close()
     return movie_data_list
 
 
