@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask
 from utils import searches_by_word, searches_by_year, \
     searches_by_rating, searches_by_genre
 
